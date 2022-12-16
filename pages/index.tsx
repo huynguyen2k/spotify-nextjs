@@ -7,8 +7,8 @@ export default function HomePage() {
       <MetaTags
         title="Spotify - Web Player"
         description="Spotify is a digital music service that gives you access to millions of songs."
-        url="https://open.spotify.com/"
-        image="https://open.spotifycdn.com/cdn/images/og-image.548bc4b7.png"
+        url={`${process.env.NEXT_PUBLIC_HOST_NAME}`}
+        image={`${process.env.NEXT_PUBLIC_HOST_NAME}/spotify-image.png`}
       />
     </>
   )
