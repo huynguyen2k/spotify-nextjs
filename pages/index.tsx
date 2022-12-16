@@ -10,6 +10,7 @@ export default function HomePage() {
         url={`${process.env.NEXT_PUBLIC_VERCEL_HOST}`}
         image={`${process.env.NEXT_PUBLIC_VERCEL_HOST}/spotify-image.png`}
       />
+      Home page
     </>
   )
 }
