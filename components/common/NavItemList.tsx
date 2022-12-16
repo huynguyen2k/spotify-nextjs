@@ -16,11 +16,11 @@ export function NavItemList({ data }: NavItemListProps) {
         <Link
           key={index}
           href={url}
-          className={`flex justify-start items-center px-6 py-2 font-bold transition-colors duration-200 ease-in hover:text-white ${classNames(
+          className={`flex items-center justify-start px-6 py-2 font-bold transition-colors duration-200 ease-in hover:text-white ${classNames(
             { 'text-white': pathname === url }
           )}`}
         >
-          <Icon className="w-6 h-6 mr-4" />
+          <Icon className="mr-4 h-6 w-6" />
           <span>{label}</span>
         </Link>
       ))}

@@ -5,5 +5,5 @@ export interface MainBodyProps {
 }
 
 export function MainBody({ children }: MainBodyProps) {
-  return <div className="ml-sidebar-width w-auto h-screen bg-slate-700">{children}</div>
+  return <div className="ml-sidebar-width h-screen w-auto bg-slate-700">{children}</div>
 }
