@@ -1,1 +1,1 @@
-export * from './navItemList'
+export * from './common'
