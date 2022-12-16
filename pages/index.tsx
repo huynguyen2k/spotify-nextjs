@@ -8,7 +8,7 @@ export default function HomePage() {
         title="Spotify - Web Player"
         description="Spotify is a digital music service that gives you access to millions of songs."
         url={`${process.env.NEXT_PUBLIC_VERCEL_URL}`}
-        image={`${process.env.NEXT_PUBLIC_VERCEL_URL}spotify-image.png`}
+        image={`${process.env.NEXT_PUBLIC_VERCEL_URL}/spotify-image.png`}
       />
     </>
   )
