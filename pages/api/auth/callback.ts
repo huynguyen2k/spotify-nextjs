@@ -2,24 +2,34 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import queryString from 'query-string'
 import { getCookie, deleteCookie } from 'cookies-next'
 import axios from 'axios'
-import { STATE_KEY } from '@/constants'
+import { spotifyConfig } from '@/constants'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'GET') {
+    res.status(404).json({ error: 'Not found!' })
+    return
+  }
+
   const code = req.query.code as string | undefined
   const state = req.query.state as string | undefined
+  const error = req.query.error as string | undefined
 
-  const storedState = getCookie(STATE_KEY, { req, res })
+  const storedState = getCookie(spotifyConfig.STATE_KEY, { req, res })
+  deleteCookie(spotifyConfig.STATE_KEY, { req, res })
+
+  if (error) {
+    res.redirect(`/login?${queryString.stringify({ error })}`)
+    return
+  }
 
   if (state && storedState && state === storedState) {
-    deleteCookie(STATE_KEY, { req, res })
-
     try {
       const response = await axios.post(
         `${process.env.SPOTIFY_AUTH_API_URL}/api/token`,
         queryString.stringify({
           code,
           redirect_uri: process.env.SPOTIFY_REDIRECT_URL,
-          grant_type: 'authorization_code',
+          grant_type: spotifyConfig.GRANT_TYPE.AUTHORIZATION_CODE,
         }),
         {
           headers: {
@@ -31,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
 
       res.redirect(`/?${queryString.stringify(response.data)}`)
-    } catch (error) {
+    } catch (catchError) {
       res.redirect(
         `/login?${queryString.stringify({
           error: 'Get access and refresh tokens failed!',
@@ -39,6 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
     }
   } else {
-    res.redirect(`/login?${queryString.stringify({ error: 'Authorize failed!' })}`)
+    res.redirect(`/login?${queryString.stringify({ error: 'Mismatch state!' })}`)
   }
 }
