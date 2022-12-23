@@ -1,8 +1,39 @@
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { TokenPayload } from '@/models'
 import spotifyIcon from '@/public/spotify-icon.png'
+import { users } from '@/spotify-api'
+import { auth } from '@/utils'
 
 export default function LoginPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    ;(async () => {
+      const { query } = router
+
+      if (query.access_token) {
+        try {
+          const tokenPayload: TokenPayload = {
+            access_token: query.access_token as string,
+            expires_in: Number(query.expires_in),
+            token_type: query.token_type as string,
+            refresh_token: query.refresh_token as string,
+            scope: query.scope as string,
+          }
+          auth.setToken(tokenPayload)
+
+          const userProfile = await users.getProfile()
+          console.log(userProfile)
+        } catch (error) {
+          console.log('error: ', error)
+        }
+      }
+    })()
+  }, [router])
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-black">
       <div>

@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       )
 
-      res.redirect(`/?${queryString.stringify(response.data)}`)
+      res.redirect(`/login?${queryString.stringify(response.data)}`)
     } catch (catchError) {
       res.redirect(
         `/login?${queryString.stringify({
