@@ -36,6 +36,8 @@
     "import/no-cycle": "off",
     "import/prefer-default-export": "off",
     "no-plusplus": "off",
-    "@typescript-eslint/naming-convention": "off"
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "no-underscore-dangle": "off"
   }
 }
