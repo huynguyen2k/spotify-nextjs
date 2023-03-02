@@ -1,4 +1,4 @@
-import { MetaTags } from '@/components/common/MetaTags'
+import { MetaTags } from '@/components/common'
 import { MainLayout } from '@/components/layout'
 
 export default function HomePage() {
