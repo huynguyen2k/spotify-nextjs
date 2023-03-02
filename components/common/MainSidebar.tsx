@@ -1,9 +1,7 @@
 import Link from 'next/link'
-import { NavItemList } from './NavItemList'
-import SpotifyIcon from '@/public/spotify-icon.svg'
 import { PATHNAMES, SIDEBAR_ITEMS } from '@/constants'
-
-export interface MainSidebarProps {}
+import SpotifyIcon from '@/public/spotify-icon.svg'
+import { NavItemList } from './NavItemList'
 
 export function MainSidebar() {
   return (
