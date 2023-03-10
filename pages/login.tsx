@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import moment from 'moment'
-import { TokenPayload, tokenPayloadSchema } from '@/models'
+import { TokenPayload } from '@/models'
 import spotifyIcon from '@/public/spotify-icon.png'
 import { users } from '@/spotify-api'
 import { auth } from '@/utils'
@@ -25,8 +25,7 @@ export default function LoginPage() {
           scope: scope as string,
         }
 
-        const isValid = await tokenPayloadSchema.isValid(tokenPayload, { strict: true })
-        if (!isValid) return
+        if (!auth.isValidTokenPayload(tokenPayload)) return
 
         auth.setToken(tokenPayload)
         const userProfile = await users.getProfile()
