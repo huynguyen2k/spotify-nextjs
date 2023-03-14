@@ -1,11 +1,11 @@
 export const spotifyConfig = {
-  STATE_KEY: 'spotify_auth_state',
-  RESPONSE_TYPE: 'code',
-  GRANT_TYPE: {
-    AUTHORIZATION_CODE: 'authorization_code',
-    REFRESH_TOKEN: 'refresh_token',
+  stateKey: 'spotify_auth_state',
+  responseType: 'code',
+  grantType: {
+    refreshToken: 'refresh_token',
+    authorizationCode: 'authorization_code',
   },
-  SCOPE: [
+  scope: [
     'ugc-image-upload',
     'user-read-playback-state',
     'user-modify-playback-state',

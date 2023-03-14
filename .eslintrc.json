@@ -38,6 +38,7 @@
     "no-plusplus": "off",
     "@typescript-eslint/naming-convention": "off",
     "@typescript-eslint/no-shadow": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "prefer-destructuring": "off"
   }
 }

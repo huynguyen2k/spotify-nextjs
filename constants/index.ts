@@ -1,2 +1,3 @@
 export * from './common'
-export * from './spotify'
+export * from './spotifyConfig'
+export * from './envConfig'

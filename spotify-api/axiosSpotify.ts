@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { auth } from '@/utils'
+import { NEXT_PUBLIC_SPOTIFY_API } from '@/constants'
 
 export const axiosSpotify = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_SPOTIFY_API,
+  baseURL: NEXT_PUBLIC_SPOTIFY_API,
   headers: {
     'Content-Type': 'application/json',
   },

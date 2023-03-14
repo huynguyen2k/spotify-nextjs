@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 import queryString from 'query-string'
-import { spotifyConfig } from '@/constants'
+import {
+  spotifyConfig,
+  SPOTIFY_AUTH_API_URL,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_SECRET_ID,
+} from '@/constants'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -14,15 +19,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (refreshToken) {
     try {
       const response = await axios.post(
-        `${process.env.SPOTIFY_AUTH_API_URL}/api/token`,
+        `${SPOTIFY_AUTH_API_URL}/api/token`,
         queryString.stringify({
-          grant_type: spotifyConfig.GRANT_TYPE.REFRESH_TOKEN,
+          grant_type: spotifyConfig.grantType.refreshToken,
           refresh_token: refreshToken,
         }),
         {
           headers: {
             Authorization: `Basic ${Buffer.from(
-              `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_SECRET_ID}`
+              `${SPOTIFY_CLIENT_ID}:${SPOTIFY_SECRET_ID}`
             ).toString('base64')}`,
           },
         }

@@ -1,5 +1,6 @@
 import { MetaTags } from '@/components/common'
 import { MainLayout } from '@/components/layout'
+import { NEXT_PUBLIC_VERCEL_HOST } from '@/constants'
 
 export default function HomePage() {
   return (
@@ -7,8 +8,8 @@ export default function HomePage() {
       <MetaTags
         title="Spotify - Web Player"
         description="Spotify is a digital music service that gives you access to millions of songs."
-        url={`${process.env.NEXT_PUBLIC_VERCEL_HOST}`}
-        image={`${process.env.NEXT_PUBLIC_VERCEL_HOST}/spotify-image.png`}
+        url={`${NEXT_PUBLIC_VERCEL_HOST}`}
+        image={`${NEXT_PUBLIC_VERCEL_HOST}/spotify-image.png`}
       />
       Home page
     </>

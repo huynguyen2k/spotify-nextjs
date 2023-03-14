@@ -2,7 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import queryString from 'query-string'
 import { getCookie, deleteCookie } from 'cookies-next'
 import axios from 'axios'
-import { spotifyConfig } from '@/constants'
+import {
+  spotifyConfig,
+  SPOTIFY_AUTH_API_URL,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_REDIRECT_URL,
+  SPOTIFY_SECRET_ID,
+} from '@/constants'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -14,8 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const state = req.query.state as string | undefined
   const error = req.query.error as string | undefined
 
-  const storedState = getCookie(spotifyConfig.STATE_KEY, { req, res })
-  deleteCookie(spotifyConfig.STATE_KEY, { req, res })
+  const storedState = getCookie(spotifyConfig.stateKey, { req, res })
+  deleteCookie(spotifyConfig.stateKey, { req, res })
 
   if (error) {
     res.redirect(`/login?${queryString.stringify({ error })}`)
@@ -25,16 +31,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (state && storedState && state === storedState) {
     try {
       const response = await axios.post(
-        `${process.env.SPOTIFY_AUTH_API_URL}/api/token`,
+        `${SPOTIFY_AUTH_API_URL}/api/token`,
         queryString.stringify({
           code,
-          redirect_uri: process.env.SPOTIFY_REDIRECT_URL,
-          grant_type: spotifyConfig.GRANT_TYPE.AUTHORIZATION_CODE,
+          redirect_uri: SPOTIFY_REDIRECT_URL,
+          grant_type: spotifyConfig.grantType.authorizationCode,
         }),
         {
           headers: {
             Authorization: `Basic ${Buffer.from(
-              `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_SECRET_ID}`
+              `${SPOTIFY_CLIENT_ID}:${SPOTIFY_SECRET_ID}`
             ).toString('base64')}`,
           },
         }

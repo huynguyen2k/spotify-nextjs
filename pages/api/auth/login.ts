@@ -1,8 +1,13 @@
+import { setCookie } from 'cookies-next'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import queryString from 'query-string'
-import { setCookie } from 'cookies-next'
 import { randomString } from '@/utils'
-import { spotifyConfig } from '@/constants'
+import {
+  spotifyConfig,
+  SPOTIFY_AUTH_API_URL,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_REDIRECT_URL,
+} from '@/constants'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -12,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const state = randomString(128)
 
-  setCookie(spotifyConfig.STATE_KEY, state, {
+  setCookie(spotifyConfig.stateKey, state, {
     req,
     res,
     maxAge: 60 * 60, // 1 hour (calculated by seconds)
@@ -21,12 +26,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   })
 
   res.redirect(
-    `${process.env.SPOTIFY_AUTH_API_URL}/authorize?${queryString.stringify({
-      client_id: process.env.SPOTIFY_CLIENT_ID,
-      redirect_uri: process.env.SPOTIFY_REDIRECT_URL,
+    `${SPOTIFY_AUTH_API_URL}/authorize?${queryString.stringify({
+      client_id: SPOTIFY_CLIENT_ID,
+      redirect_uri: SPOTIFY_REDIRECT_URL,
       state,
-      scope: spotifyConfig.SCOPE,
-      response_type: spotifyConfig.RESPONSE_TYPE,
+      scope: spotifyConfig.scope,
+      response_type: spotifyConfig.responseType,
     })}`
   )
 }
