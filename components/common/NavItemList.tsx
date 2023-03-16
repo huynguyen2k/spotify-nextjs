@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import classNames from 'classnames'
-import { NavItem } from '@/models'
+import { NavItem } from '@/constants'
 
 export interface NavItemListProps {
   data: NavItem[]
@@ -12,15 +12,15 @@ export function NavItemList({ data }: NavItemListProps) {
 
   return (
     <div className="text-stone-400">
-      {data.map(({ icon: Icon, link, label }, index) => (
+      {data.map(({ icon, label, url }, index) => (
         <Link
           key={index}
-          href={link}
+          href={url}
           className={`flex items-center justify-start px-6 py-2 font-bold transition-colors duration-200 ease-in hover:text-white ${classNames(
-            { 'text-white': pathname === link.pathname }
+            { 'text-white': pathname === url }
           )}`}
         >
-          <Icon className="mr-4 h-6 w-6" />
+          <span className="mr-4 h-6 w-6">{icon}</span>
           <span>{label}</span>
         </Link>
       ))}
