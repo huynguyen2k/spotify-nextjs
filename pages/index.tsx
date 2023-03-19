@@ -1,3 +1,5 @@
+import { GetStaticProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { MetaTags } from '@/components/common'
 import { MainLayout } from '@/components/layout'
 import { NEXT_PUBLIC_VERCEL_HOST } from '@/constants'
@@ -14,6 +16,14 @@ export default function HomePage() {
       Home page
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale!, ['common'])),
+    },
+  }
 }
 
 HomePage.Layout = MainLayout
