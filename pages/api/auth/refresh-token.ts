@@ -2,15 +2,19 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 import queryString from 'query-string'
 import {
+  httpError,
+  HttpMethod,
+  HttpStatusCode,
   spotifyConfig,
   SPOTIFY_AUTH_API_URL,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_SECRET_ID,
 } from '@/constants'
+import { HttpAuthError } from '@/models'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    res.status(404).json({ error: 'Not found!' })
+  if (req.method !== HttpMethod.GET) {
+    res.status(HttpStatusCode.NOT_FOUND).json(httpError.notFound)
     return
   }
 
@@ -32,16 +36,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
         }
       )
-
-      res.status(200).json(response.data)
+      res.status(HttpStatusCode.OK).json(response.data)
     } catch (error) {
-      res.status(400).json({
-        error: 'Your refresh token is invalid!',
-      })
+      const invalidRefreshTokenError: HttpAuthError = {
+        error: 'Invalid refresh token.',
+        error_description: 'Your refresh token is not valid.',
+      }
+      res.status(HttpStatusCode.BAD_REQUEST).json(invalidRefreshTokenError)
     }
   } else {
-    res.status(400).json({
-      error: 'You are missing refresh token!',
-    })
+    const missingRefreshTokenError: HttpAuthError = {
+      error: 'Missing refresh token.',
+      error_description: 'Your query params are missing refresh token.',
+    }
+    res.status(HttpStatusCode.BAD_REQUEST).json(missingRefreshTokenError)
   }
 }

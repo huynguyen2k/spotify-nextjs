@@ -3,16 +3,20 @@ import queryString from 'query-string'
 import { getCookie, deleteCookie } from 'cookies-next'
 import axios from 'axios'
 import {
+  httpError,
+  HttpMethod,
+  HttpStatusCode,
   spotifyConfig,
   SPOTIFY_AUTH_API_URL,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_REDIRECT_URL,
   SPOTIFY_SECRET_ID,
 } from '@/constants'
+import { HttpAuthError } from '@/models'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    res.status(404).json({ error: 'Not found!' })
+  if (req.method !== HttpMethod.GET) {
+    res.status(HttpStatusCode.NOT_FOUND).json(httpError.notFound)
     return
   }
 
@@ -24,7 +28,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   deleteCookie(spotifyConfig.stateKey, { req, res })
 
   if (error) {
-    res.redirect(`/login?${queryString.stringify({ error })}`)
+    const unauthorizedError: HttpAuthError = {
+      error: 'Unauthorized error.',
+      error_description: error,
+    }
+    res.redirect(`/login?${queryString.stringify(unauthorizedError)}`)
     return
   }
 
@@ -47,14 +55,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
 
       res.redirect(`/login?${queryString.stringify(response.data)}`)
-    } catch (catchError) {
-      res.redirect(
-        `/login?${queryString.stringify({
-          error: 'Get access and refresh tokens failed!',
-        })}`
-      )
+    } catch (httpError) {
+      res.redirect(`/login?${queryString.stringify(httpError as HttpAuthError)}`)
     }
   } else {
-    res.redirect(`/login?${queryString.stringify({ error: 'Mismatch state!' })}`)
+    const stateError: HttpAuthError = {
+      error: 'Mismatch state.',
+      error_description:
+        'The state that you requested to login with your current state is not match.',
+    }
+    res.redirect(`/login?${queryString.stringify(stateError)}`)
   }
 }

@@ -3,6 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import queryString from 'query-string'
 import { randomString } from '@/utils'
 import {
+  httpError,
+  HttpMethod,
+  HttpStatusCode,
   spotifyConfig,
   SPOTIFY_AUTH_API_URL,
   SPOTIFY_CLIENT_ID,
@@ -10,17 +13,19 @@ import {
 } from '@/constants'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    res.status(404).json({ error: 'Not found!' })
+  if (req.method !== HttpMethod.GET) {
+    res.status(HttpStatusCode.NOT_FOUND).json(httpError.notFound)
     return
   }
 
-  const state = randomString(128)
+  const stringLength = 128
+  const state = randomString(stringLength)
+  const expiredTime = 60 * 60 // 1 hour (calculated by seconds)
 
   setCookie(spotifyConfig.stateKey, state, {
     req,
     res,
-    maxAge: 60 * 60, // 1 hour (calculated by seconds)
+    maxAge: expiredTime,
     httpOnly: true,
     sameSite: 'lax',
   })
