@@ -38,11 +38,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       )
       res.status(HttpStatusCode.OK).json(response.data)
     } catch (error) {
-      const invalidRefreshTokenError: HttpAuthError = {
-        error: 'Invalid refresh token.',
-        error_description: 'Your refresh token is not valid.',
+      const unexpectedError: HttpAuthError = {
+        error: 'Unexpected error.',
+        error_description: 'Failed to fetch new access token.',
       }
-      res.status(HttpStatusCode.BAD_REQUEST).json(invalidRefreshTokenError)
+
+      if (axios.isAxiosError<HttpAuthError>(error)) {
+        res.status(HttpStatusCode.BAD_REQUEST).json(error.response?.data ?? unexpectedError)
+        return
+      }
+
+      res.status(HttpStatusCode.BAD_REQUEST).json(unexpectedError)
     }
   } else {
     const missingRefreshTokenError: HttpAuthError = {

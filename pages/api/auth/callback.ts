@@ -56,7 +56,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       res.redirect(`/login?${queryString.stringify(response.data)}`)
     } catch (httpError) {
-      res.redirect(`/login?${queryString.stringify(httpError as HttpAuthError)}`)
+      const unexpectedError: HttpAuthError = {
+        error: 'Unexpected error.',
+        error_description: 'Failed to fetch access token.',
+      }
+
+      if (axios.isAxiosError<HttpAuthError>(httpError)) {
+        res.redirect(`/login?${queryString.stringify(httpError.response?.data ?? unexpectedError)}`)
+        return
+      }
+
+      res.redirect(`/login?${queryString.stringify(unexpectedError)}`)
     }
   } else {
     const stateError: HttpAuthError = {
