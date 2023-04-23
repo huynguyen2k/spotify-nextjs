@@ -4,8 +4,11 @@ import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { ReactElement, ReactNode, useState } from 'react'
 import { appWithTranslation } from 'next-i18next'
+import { ToastContainer } from 'react-toastify'
 import { EmptyLayout } from '@/components/layout'
 import { AppFavicon } from '@/components/common'
+
+import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
 
 export type LayoutProps = {
@@ -30,6 +33,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <AppFavicon />
+          <ToastContainer />
 
           <Layout>
             <Component {...pageProps} />

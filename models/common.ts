@@ -4,6 +4,8 @@ export interface HttpAuthError {
 }
 
 export interface HttpRegularError {
-  status: number
-  message: string
+  error: {
+    status: number
+    message: string
+  }
 }
