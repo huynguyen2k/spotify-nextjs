@@ -1,4 +1,4 @@
-import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Hydrate, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
@@ -10,6 +10,7 @@ import { AppFavicon } from '@/components/common'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
+import { handleRegularError } from '@/utils/handleRegularError'
 
 export type LayoutProps = {
   children: ReactNode
@@ -24,25 +25,30 @@ export type AppPropsWithLayout = AppProps & {
 }
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          onError: error => handleRegularError(error),
+        }),
+      })
+  )
 
   const Layout = Component.Layout ?? EmptyLayout
 
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <AppFavicon />
-          <ToastContainer />
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <AppFavicon />
+        <ToastContainer />
 
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Hydrate>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Hydrate>
 
-        <ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
-      </QueryClientProvider>
-    </>
+      <ReactQueryDevtools initialIsOpen={false} panelPosition="right" />
+    </QueryClientProvider>
   )
 }
 
