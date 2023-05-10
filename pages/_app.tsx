@@ -31,6 +31,16 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         queryCache: new QueryCache({
           onError: error => handleRegularError(error),
         }),
+        defaultOptions: {
+          queries: {
+            retry: false,
+            retryOnMount: false,
+            staleTime: 60 * 1000, // 1 minute
+            cacheTime: 5 * 60 * 1000, // 5 minutes
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+          },
+        },
       })
   )
 
