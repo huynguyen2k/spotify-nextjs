@@ -10,4 +10,8 @@ export const routesConfig = {
   getLibraryUrl() {
     return '/collection/playlists'
   },
+
+  getLoginUrl() {
+    return '/login'
+  },
 }
