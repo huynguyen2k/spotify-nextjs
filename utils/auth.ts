@@ -38,4 +38,8 @@ export const auth = {
   clearToken() {
     localStorage.removeItem(this.tokenKey)
   },
+
+  isLoggedIn() {
+    return !!this.getToken()
+  },
 }
