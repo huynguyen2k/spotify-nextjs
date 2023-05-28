@@ -1,4 +1,5 @@
 import { object, SchemaOf, string } from 'yup'
+import moment from 'moment'
 import { TokenPayload } from '@/models'
 
 export const auth = {
@@ -41,5 +42,17 @@ export const auth = {
 
   isLoggedIn() {
     return !!this.getToken()
+  },
+
+  isTokenExpired() {
+    const token = this.getToken()
+
+    if (!token) return false
+
+    const currentTime = moment()
+    // expired time happen before 5 minutes
+    const expiredTime = moment(token.expires_in).subtract(5, 'minutes')
+
+    return currentTime.isSameOrAfter(expiredTime)
   },
 }

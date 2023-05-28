@@ -7,10 +7,10 @@ import { appWithTranslation } from 'next-i18next'
 import { ToastContainer } from 'react-toastify'
 import { EmptyLayout } from '@/components/layout'
 import { AppFavicon } from '@/components/common'
+import { handleRegularError } from '@/utils'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
-import { handleRegularError } from '@/utils/handleRegularError'
 
 export type LayoutProps = {
   children: ReactNode
