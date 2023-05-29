@@ -1,7 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import { auth } from '@/utils'
-import { NEXT_PUBLIC_SPOTIFY_API } from '@/constants'
+import { NEXT_PUBLIC_SPOTIFY_API, routesConfig } from '@/constants'
 import { TokenPayload } from '@/models'
 import { authApi } from './authApi'
 
@@ -38,6 +38,7 @@ axiosSpotify.interceptors.request.use(
         refreshTokenRequest = null
       } catch (error) {
         auth.clearToken()
+        window.location.href = routesConfig.getLoginUrl()
         refreshTokenRequest = null
         return newConfig
       }
