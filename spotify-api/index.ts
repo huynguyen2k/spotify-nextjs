@@ -1,4 +1,4 @@
 export * from './axiosSpotify'
 export * from './axiosAuth'
-export * from './users'
+export * from './usersApi'
 export * from './authApi'
