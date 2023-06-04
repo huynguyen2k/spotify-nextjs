@@ -1,3 +1,3 @@
 export * from './randomString'
 export * from './auth'
-export * from './handleRegularError'
+export * from './handleAxiosError'

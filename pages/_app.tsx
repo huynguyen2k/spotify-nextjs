@@ -7,7 +7,7 @@ import { appWithTranslation } from 'next-i18next'
 import { ToastContainer } from 'react-toastify'
 import { EmptyLayout } from '@/components/layout'
 import { AppFavicon } from '@/components/common'
-import { handleRegularError } from '@/utils'
+import { handleAxiosError } from '@/utils'
 
 import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
@@ -29,7 +29,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     () =>
       new QueryClient({
         queryCache: new QueryCache({
-          onError: error => handleRegularError(error),
+          onError: error => handleAxiosError(error),
         }),
         defaultOptions: {
           queries: {

@@ -40,7 +40,7 @@ axiosSpotify.interceptors.request.use(
         auth.clearToken()
         window.location.href = routesConfig.getLoginUrl()
         refreshTokenRequest = null
-        return newConfig
+        throw error
       }
     }
 
