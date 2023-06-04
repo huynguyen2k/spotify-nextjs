@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios, { isAxiosError } from 'axios'
 import moment from 'moment'
 import { auth } from '@/utils'
-import { NEXT_PUBLIC_SPOTIFY_API, routesConfig } from '@/constants'
+import { HttpStatusCode, NEXT_PUBLIC_SPOTIFY_API, routesConfig } from '@/constants'
 import { TokenPayload } from '@/models'
 import { authApi } from './authApi'
 
@@ -55,5 +55,15 @@ axiosSpotify.interceptors.request.use(
 
 axiosSpotify.interceptors.response.use(
   response => response.data,
-  error => Promise.reject(error)
+  error => {
+    if (
+      isAxiosError(error) &&
+      (error.response?.status === HttpStatusCode.UNAUTHORIZED ||
+        error.response?.status === HttpStatusCode.FORBIDDEN)
+    ) {
+      auth.clearToken()
+      window.location.href = routesConfig.getLoginUrl()
+    }
+    return Promise.reject(error)
+  }
 )
