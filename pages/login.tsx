@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import { toast } from 'react-toastify'
+import { GetStaticProps } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { TokenPayload } from '@/models'
 import spotifyIcon from '@/public/spotify-icon.png'
 import { auth } from '@/utils'
@@ -83,4 +85,12 @@ export default function LoginPage() {
       </div>
     </>
   )
+}
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale!, ['common'])),
+    },
+  }
 }
